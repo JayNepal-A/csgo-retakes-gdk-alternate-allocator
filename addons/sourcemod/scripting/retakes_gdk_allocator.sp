@@ -13,7 +13,7 @@ public Plugin myinfo =
     name = "CS:GO Retakes: Gdk's alternate weapon allocator",
     author = "Gdk",
     description = "Alternate weapon allocator for splewis retakes plugin",
-    version = "0.0.1",
+    version = "1.0.1",
     url = "TopSecretGaming.net"
 };
 
@@ -156,7 +156,7 @@ public Action OnClientSayCommand(int client, const char[] command, const char[] 
 		GiveM4Menu(client);
 	}
 	
-	char pistolsChatCommands[][] = {"pistol", "pistols", ".pistol", ".pistols", "secondary", "!secondary"};
+	char pistolsChatCommands[][] = {"pistol", "pistols", ".pistol", ".pistols", "secondary", "!secondary", "!pistol", "/pistol"};
 	for (int i = 0; i < sizeof(pistolsChatCommands); i++) 
 	{
 		if (StrEqual(args[0], pistolsChatCommands[i], false))
