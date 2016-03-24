@@ -13,7 +13,7 @@ public Plugin myinfo =
     name = "CS:GO Retakes: Gdk's alternate weapon allocator",
     author = "Gdk",
     description = "Alternate weapon allocator for splewis retakes plugin",
-    version = "1.0.1",
+    version = "1.0.2",
     url = "TopSecretGaming.net"
 };
 
@@ -134,7 +134,7 @@ public void OnClientConnected(int client)
 public Action Command_GunsMenu(int client, int args) 
 {
 	GiveM4Menu(client);
-	return Plugin_Continue;
+	return Plugin_Handled;
 }
 
 public Action Command_PistolsMenu(int client, int args) 
@@ -144,7 +144,7 @@ public Action Command_PistolsMenu(int client, int args)
 	{
 		GiveCTPistolMenu(client);
 	}
-	return Plugin_Continue;
+	return Plugin_Handled;
 }
 
 public Action OnClientSayCommand(int client, const char[] command, const char[] args)
