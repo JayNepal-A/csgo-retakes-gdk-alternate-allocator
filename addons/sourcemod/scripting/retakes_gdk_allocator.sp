@@ -13,7 +13,7 @@ public Plugin myinfo =
     name = "CS:GO Retakes: Gdk's alternate weapon allocator",
     author = "Gdk",
     description = "Alternate weapon allocator for splewis retakes plugin",
-    version = "1.0.2",
+    version = "1.0.3",
     url = "TopSecretGaming.net"
 };
 
@@ -541,7 +541,7 @@ static void SetNades(char nades[NADE_STRING_LENGTH], bool terrorist, bool isPist
 				{
 					randgive = GetRandomInt(1, 10);
 
-                    			if(randgive > 6)
+                    			if(randgive > 5)
 					{
 						if(pistol_round_dollars >= g_nade_price_smokegrenade || !isPistolRound)
 						{
@@ -583,7 +583,7 @@ static void SetNades(char nades[NADE_STRING_LENGTH], bool terrorist, bool isPist
                     		{
 					randgive = GetRandomInt(1, 10);
 
-					if(randgive > 4)
+					if(randgive > 3)
 					{
 						if(pistol_round_dollars >= g_nade_price_flashbang || !isPistolRound)
 						{
@@ -602,10 +602,9 @@ static void SetNades(char nades[NADE_STRING_LENGTH], bool terrorist, bool isPist
                 	case 4:
 				if ((terrorist ? g_molotov_t_count : g_molotov_ct_count) < max_molotov_allow && molotov_number == 0)
                     		{
-					randgive = GetRandomInt(1, 10);
+					randgive = GetRandomInt(1, 20);
 				
-					//10% chance to give molotov
-                    			if(randgive < 2)
+                    			if(randgive < 5)
 					{	
                         			if (terrorist)
 						{
@@ -628,8 +627,7 @@ static void SetNades(char nades[NADE_STRING_LENGTH], bool terrorist, bool isPist
 							}
 						}
 					}
-					//10% chance to give decoy
-					else if(randgive > 9 && (terrorist ? g_decoy_t_count : g_decoy_ct_count) < max_decoy_allow && decoy_number == 0) //sometimes give decoy
+					else if(randgive > 19 && (terrorist ? g_decoy_t_count : g_decoy_ct_count) < max_decoy_allow && decoy_number == 0) //sometimes give decoy
 					{
 						if(pistol_round_dollars >= g_nade_price_decoy || !isPistolRound)
 						{
