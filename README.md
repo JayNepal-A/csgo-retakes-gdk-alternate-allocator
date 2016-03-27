@@ -1,4 +1,4 @@
 # csgo-retakes-gdk-alternate-allocator
-Gdk's alternate weapon allocator for Splewis RETAKES Plugin
+Alternate weapon allocator for Splewis RETAKES Plugin.
 
 https://topsecretgaming.net
