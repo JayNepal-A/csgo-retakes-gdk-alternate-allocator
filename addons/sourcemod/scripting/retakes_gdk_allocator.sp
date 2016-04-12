@@ -13,7 +13,7 @@ public Plugin myinfo =
     name = "CS:GO Retakes: Gdk's alternate weapon allocator",
     author = "Gdk",
     description = "Alternate weapon allocator for splewis retakes plugin",
-    version = "1.0.3",
+    version = "1.1.1",
     url = "TopSecretGaming.net"
 };
 
@@ -91,7 +91,6 @@ public void OnPluginStart()
 	g_t_sidearm_cookie = RegClientCookie("retakes_t_sidearm", "", CookieAccess_Private);
     	g_m4_cookie  = RegClientCookie("retakes_m4", "", CookieAccess_Private);
     	g_awp_cookie = RegClientCookie("retakes_awp", "", CookieAccess_Private);
-
     	RegConsoleCmd("sm_guns", Command_GunsMenu, "Opens the retakes primary weapons menu");
 	RegConsoleCmd("sm_pistols", Command_PistolsMenu, "Opens the retakes seconday weapons menu");
 
@@ -119,16 +118,6 @@ public void OnPluginStart()
     	g_revolver_enabled  = CreateConVar(	"sm_retakes_revolver_enabled", "1", "Whether players can choose Revolver");
 
     	AutoExecConfig(true, "retakes_gdk_allocator", "sourcemod/retakes");
-}
-
-public void OnClientConnected(int client) 
-{
-	g_ct_pistol[client] = 1;
-	g_t_pistol[client] = 1;
-	g_ct_sidearm[client] = 6;
-	g_t_sidearm[client] = 6;
-	g_silenced_m4[client] = true;
-	g_awp[client] = true;
 }
 
 public Action Command_GunsMenu(int client, int args) 
@@ -183,6 +172,31 @@ public void OnClientCookiesCached(int client)
 {
 	if (IsFakeClient(client))
         	return;
+
+	if(!GetClientCookieTime(client, g_ct_pistol_cookie))
+	{
+		SetCookieInt(client, g_ct_pistol_cookie, 1);
+	}
+	if(!GetClientCookieTime(client, g_t_pistol_cookie))
+	{
+		SetCookieInt(client, g_t_pistol_cookie, 1);
+	}
+	if(!GetClientCookieTime(client, g_ct_sidearm_cookie))
+	{
+		SetCookieInt(client, g_ct_sidearm_cookie, 6);
+	}
+	if(!GetClientCookieTime(client, g_t_sidearm_cookie))
+	{
+		SetCookieInt(client, g_t_sidearm_cookie, 6);
+	}
+	if(!GetClientCookieTime(client, g_m4_cookie))
+	{
+		SetCookieInt(client, g_m4_cookie, 0);
+	}
+	if(!GetClientCookieTime(client, g_awp_cookie))
+	{
+		SetCookieInt(client, g_awp_cookie, 1);
+	}
 
     	g_ct_pistol[client] = GetCookieInt (client, g_ct_pistol_cookie);
 	g_t_pistol[client] = GetCookieInt (client, g_t_pistol_cookie);
