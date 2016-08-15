@@ -13,7 +13,7 @@ public Plugin myinfo =
     name = "CS:GO Retakes: Gdk's alternate weapon allocator",
     author = "Gdk",
     description = "Alternate weapon allocator for splewis retakes plugin",
-    version = "1.1.1",
+    version = "1.1.2",
     url = "TopSecretGaming.net"
 };
 
@@ -721,7 +721,7 @@ public int MenuHandler_AWP(Handle menu, MenuAction action, int param1, int param
 public void GiveCTPistolMenu(int client) 
 {
 	Handle menu = CreateMenu(MenuHandler_CT_PISTOL);
-	SetMenuTitle(menu, "Select CT pistol round weapon:");
+	SetMenuTitle(menu, "CT pistol round weapon:");
 	AddMenuInt(menu, 1, "P2000/USP-S");
 	if (GetConVarInt(g_p250_enabled) == 1)
 		AddMenuInt(menu, 2, "p250");
@@ -754,7 +754,7 @@ public int MenuHandler_CT_PISTOL(Handle menu, MenuAction action, int param1, int
 public void GiveCTSideMenu(int client) 
 {
 	Handle menu = CreateMenu(MenuHandler_CT_Sidearm);
-	SetMenuTitle(menu, "Select CT sidearm:");
+	SetMenuTitle(menu, "CT gun round sidearm:");
 	AddMenuInt(menu, 1, "P2000/USP-S");
 	if (GetConVarInt(g_p250_enabled) == 1)
 		AddMenuInt(menu, 2, "p250");
@@ -789,7 +789,7 @@ public int MenuHandler_CT_Sidearm(Handle menu, MenuAction action, int param1, in
 public void GiveTPistolMenu(int client) 
 {
 	Handle menu = CreateMenu(MenuHandler_T_PISTOL);
-	SetMenuTitle(menu, "Select T pistol round weapon:");
+	SetMenuTitle(menu, "T pistol round weapon:");
 	AddMenuInt(menu, 1, "Glock");
 	if (GetConVarInt(g_p250_enabled) == 1)
 		AddMenuInt(menu, 2, "p250");
@@ -822,7 +822,7 @@ public int MenuHandler_T_PISTOL(Handle menu, MenuAction action, int param1, int 
 public void GiveTSideMenu(int client) 
 {
 	Handle menu = CreateMenu(MenuHandler_T_Sidearm);
-	SetMenuTitle(menu, "Select T sidearm:");
+	SetMenuTitle(menu, "T gun round sidearm:");
 	AddMenuInt(menu, 1, "Glock");
 	if (GetConVarInt(g_p250_enabled) == 1)
 		AddMenuInt(menu, 2, "p250");
@@ -851,4 +851,3 @@ public int MenuHandler_T_Sidearm(Handle menu, MenuAction action, int param1, int
 	else if (action == MenuAction_End)
         	CloseHandle(menu);
 }
-
