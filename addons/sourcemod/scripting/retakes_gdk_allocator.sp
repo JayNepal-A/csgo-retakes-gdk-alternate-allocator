@@ -130,7 +130,7 @@ public void OnPluginStart()
 	g_he_chance = CreateConVar(	"sm_retakes_he_chance", "3", "Chance to skip he");
 	g_flash_chance = CreateConVar(	"sm_retakes_flash_chance", "2", "Chance to skip flash");
 	g_molitov_chance = CreateConVar("sm_retakes_molitov_chance", "17", "Chance to skip molitov");
-	g_decoy_chance = CreateConVar("sm_retakes_molitov_chance", "2", "Chance to skip decoy");
+	g_decoy_chance = CreateConVar("sm_retakes_decoy_chance", "2", "Chance to skip decoy");
 
     	AutoExecConfig(true, "retakes_gdk_allocator", "sourcemod/retakes");
 }
