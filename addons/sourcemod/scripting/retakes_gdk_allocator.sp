@@ -13,7 +13,7 @@ public Plugin myinfo =
     name = "CS:GO Retakes: Gdk's alternate weapon allocator",
     author = "Gdk",
     description = "Alternate weapon allocator for splewis retakes plugin",
-    version = "1.4.0",
+    version = "1.3.0",
     url = "TopSecretGaming.net"
 };
 
@@ -82,10 +82,6 @@ Handle g_tec9_enabled = INVALID_HANDLE;
 Handle g_fiveseven_enabled = INVALID_HANDLE;
 Handle g_dual_elite_enabled = INVALID_HANDLE;
 Handle g_revolver_enabled = INVALID_HANDLE;
-Handle g_smoke_chance = INVALID_HANDLE;
-Handle g_he_chance = INVALID_HANDLE;
-Handle g_flash_chance = INVALID_HANDLE;
-Handle g_molitov_chance = INVALID_HANDLE;
 
 
 public void OnPluginStart() 
@@ -103,10 +99,10 @@ public void OnPluginStart()
     	//convars
     	g_pistolrounds = CreateConVar(		"sm_retakes_pistolrounds", "5", "The number of pistol rounds (0 = no pistol round)");
 	g_advertise_pistol_menu = CreateConVar(	"sm_retakes_advertise_pistol_menu", "1", "Advertise pistol menu after guns menu displayed? \n0=no, 1=yes, 2=Always display pistol menu");
-    	g_hegrenade_ct_max = CreateConVar(	"sm_retakes_hegrenade_ct_max", "2", "Max hegrenade CT team can have");
-    	g_hegrenade_t_max = CreateConVar(	"sm_retakes_hegrenade_t_max", "2", "Max hegrenade T team can have");
+    	g_hegrenade_ct_max = CreateConVar(	"sm_retakes_hegrenade_ct_max", "1", "Max hegrenade CT team can have");
+    	g_hegrenade_t_max = CreateConVar(	"sm_retakes_hegrenade_t_max", "1", "Max hegrenade T team can have");
     	g_flashbang_ct_max = CreateConVar(	"sm_retakes_flashbang_ct_max", "2", "Max flashbang CT team can have");
-    	g_flashbang_t_max = CreateConVar(	"sm_retakes_flashbang_t_max", "2", "Max flashbang T team can have");
+    	g_flashbang_t_max = CreateConVar(	"sm_retakes_flashbang_t_max", "1", "Max flashbang T team can have");
     	g_smokegrenade_ct_max = CreateConVar(	"sm_retakes_smokegrenade_ct_max", "1", "Max smokegrenade CT team can have");
     	g_smokegrenade_t_max = CreateConVar(	"sm_retakes_smokegrenade_t_max", "1", "Max smokegrenade T team can have");
     	g_molotov_ct_max = CreateConVar(	"sm_retakes_molotov_ct_max", "1", "Max molotov CT team can have");
@@ -122,14 +118,6 @@ public void OnPluginStart()
 	g_fiveseven_enabled = CreateConVar(	"sm_retakes_fiveseven_enabled", "1", "Whether players can choose Five seven");
     	g_dual_elite_enabled = CreateConVar(	"sm_retakes_dual_elite_enabled", "1", "Whether players can choose Dual Elite");
     	g_revolver_enabled  = CreateConVar(	"sm_retakes_revolver_enabled", "1", "Whether players can choose Revolver");
-
-	// lower values indicate higher chance of player receiving (except for decoy is the opposite change this later)
-	// To do: rework nade setup 
-	g_smoke_chance = CreateConVar(	"sm_retakes_smoke_chance", "4", "Chance to skip smoke");
-	g_he_chance = CreateConVar(	"sm_retakes_he_chance", "3", "Chance to skip he");
-	g_flash_chance = CreateConVar(	"sm_retakes_flash_chance", "2", "Chance to skip flash");
-	g_molitov_chance = CreateConVar("sm_retakes_molitov_chance", "17", "Chance to skip molitov");
-	g_decoy_chance = CreateConVar("sm_retakes_molitov_chance", "2", "Chance to skip decoy");
 
     	AutoExecConfig(true, "retakes_gdk_allocator", "sourcemod/retakes");
 }
@@ -648,7 +636,7 @@ static void SetNades(char nades[NADE_STRING_LENGTH], bool terrorist, bool isPist
 				{
 					randgive = GetRandomInt(1, 10);
 
-                    			if(randgive > GetConVarInt(g_smoke_chance))
+                    			if(randgive > 5)
 					{
 						if(pistol_round_dollars >= g_nade_price_smokegrenade || !isPistolRound)
 						{
@@ -669,7 +657,7 @@ static void SetNades(char nades[NADE_STRING_LENGTH], bool terrorist, bool isPist
                     		{
 					randgive = GetRandomInt(1, 10);
 
-					if(randgive > GetConVarInt(g_he_chance))
+					if(randgive > 4)
 					{
                       				if(pistol_round_dollars >= g_nade_price_hegrenade || !isPistolRound)
 						{
@@ -690,7 +678,7 @@ static void SetNades(char nades[NADE_STRING_LENGTH], bool terrorist, bool isPist
                     		{
 					randgive = GetRandomInt(1, 10);
 
-					if(randgive > GetConVarInt(g_flash_chance))
+					if(randgive > 3)
 					{
 						if(pistol_round_dollars >= g_nade_price_flashbang || !isPistolRound)
 						{
@@ -711,7 +699,7 @@ static void SetNades(char nades[NADE_STRING_LENGTH], bool terrorist, bool isPist
                     		{
 					randgive = GetRandomInt(1, 20);
 				
-                    			if(randgive > GetConVarInt(g_molitov_chance))
+                    			if(randgive < 5)
 					{	
                         			if (terrorist)
 						{
@@ -734,7 +722,7 @@ static void SetNades(char nades[NADE_STRING_LENGTH], bool terrorist, bool isPist
 							}
 						}
 					}
-					else if(randgive < GetConVarInt(g_decoy_chance) && (terrorist ? g_decoy_t_count : g_decoy_ct_count) < max_decoy_allow && decoy_number == 0) //sometimes give decoy
+					else if(randgive > 19 && (terrorist ? g_decoy_t_count : g_decoy_ct_count) < max_decoy_allow && decoy_number == 0) //sometimes give decoy
 					{
 						if(pistol_round_dollars >= g_nade_price_decoy || !isPistolRound)
 						{
@@ -785,11 +773,9 @@ public int MenuHandler_M4(Handle menu, MenuAction action, int param1, int param2
 //Awp Menu
 public void GiveAwpMenu(int client) 
 {
-    	Handle menu = CreateMenu(MenuHandler_AWP);
 
+    	Handle menu = CreateMenu(MenuHandler_AWP);
     	SetMenuTitle(menu, "Allow yourself to receive AWPs?");
-	SetMenuPagination(menu, MENU_NO_PAGINATION);
-	SetMenuExitButton(menu, true);
 
 	if(GetUserAdmin(client) != INVALID_ADMIN_ID)
 	{
@@ -827,11 +813,7 @@ public int MenuHandler_AWP(Handle menu, MenuAction action, int param1, int param
 public void GiveCTPistolMenu(int client) 
 {
 	Handle menu = CreateMenu(MenuHandler_CT_PISTOL);
-
 	SetMenuTitle(menu, "CT pistol round weapon:");
-	SetMenuPagination(menu, MENU_NO_PAGINATION);
-	SetMenuExitButton(menu, true);
-
 	AddMenuInt(menu, 1, "P2000/USP-S");
 	if (GetConVarInt(g_p250_enabled) == 1)
 		AddMenuInt(menu, 2, "p250");
@@ -843,7 +825,6 @@ public void GiveCTPistolMenu(int client)
        	 	AddMenuInt(menu, 5, "Dual Elite");
    	if (GetConVarInt(g_dual_elite_enabled) == 1)
         	AddMenuInt(menu, 6, "Deagle");
-
     	DisplayMenu(menu, client, MENU_TIME_LENGTH);
 }
 
@@ -865,11 +846,7 @@ public int MenuHandler_CT_PISTOL(Handle menu, MenuAction action, int param1, int
 public void GiveCTSideMenu(int client) 
 {
 	Handle menu = CreateMenu(MenuHandler_CT_Sidearm);
-	
 	SetMenuTitle(menu, "CT gun round sidearm:");
-	SetMenuPagination(menu, MENU_NO_PAGINATION);
-	SetMenuExitButton(menu, true);
-
 	AddMenuInt(menu, 1, "P2000/USP-S");
 	if (GetConVarInt(g_p250_enabled) == 1)
 		AddMenuInt(menu, 2, "p250");
@@ -883,7 +860,6 @@ public void GiveCTSideMenu(int client)
         	AddMenuInt(menu, 6, "Deagle");
 	if (GetConVarInt(g_dual_elite_enabled) == 1)
        		AddMenuInt(menu, 7, "Dual Elite");
-
     	DisplayMenu(menu, client, MENU_TIME_LENGTH);
 }
 
@@ -905,11 +881,7 @@ public int MenuHandler_CT_Sidearm(Handle menu, MenuAction action, int param1, in
 public void GiveTPistolMenu(int client) 
 {
 	Handle menu = CreateMenu(MenuHandler_T_PISTOL);
-
 	SetMenuTitle(menu, "T pistol round weapon:");
-	SetMenuPagination(menu, MENU_NO_PAGINATION);
-	SetMenuExitButton(menu, true);
-
 	AddMenuInt(menu, 1, "Glock");
 	if (GetConVarInt(g_p250_enabled) == 1)
 		AddMenuInt(menu, 2, "p250");
@@ -921,7 +893,6 @@ public void GiveTPistolMenu(int client)
        	 	AddMenuInt(menu, 5, "Dual Elite");
    	if (GetConVarInt(g_dual_elite_enabled) == 1)
         	AddMenuInt(menu, 6, "Deagle");
-
     	DisplayMenu(menu, client, MENU_TIME_LENGTH);
 }
 
@@ -943,11 +914,7 @@ public int MenuHandler_T_PISTOL(Handle menu, MenuAction action, int param1, int 
 public void GiveTSideMenu(int client) 
 {
 	Handle menu = CreateMenu(MenuHandler_T_Sidearm);
-
 	SetMenuTitle(menu, "T gun round sidearm:");
-	SetMenuPagination(menu, MENU_NO_PAGINATION);
-	SetMenuExitButton(menu, true);
-
 	AddMenuInt(menu, 1, "Glock");
 	if (GetConVarInt(g_p250_enabled) == 1)
 		AddMenuInt(menu, 2, "p250");
@@ -961,7 +928,6 @@ public void GiveTSideMenu(int client)
         	AddMenuInt(menu, 6, "Deagle");
 	if (GetConVarInt(g_dual_elite_enabled) == 1)
        		AddMenuInt(menu, 7, "Dual Elite");
-
     	DisplayMenu(menu, client, MENU_TIME_LENGTH);
 }
 
